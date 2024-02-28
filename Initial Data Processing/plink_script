@@ -1,2 +1,3 @@
-plink --vcf annotated.vcf.gz --make-bed --out output_file
+# Command to convert the VCF file into bed file
+plink2 --vcf annotated.vcf.gz --make-bed --out output_file
 
