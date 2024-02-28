@@ -1,0 +1,1 @@
+plink --vcf annotated.vcf.gz --pca --out clustering
