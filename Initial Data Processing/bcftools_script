@@ -1,6 +1,7 @@
 # make sure to download the VCF file you wish to annotate or use our one
 # you will also need the indexed file
-# Bcftool command to annotate the chr1.vcf.gz with more RSIDS
 wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/hg38/dbsnp_146.hg38.vcf.gz
 wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/hg38/dbsnp_146.hg38.vcf.gz.tbi
+
+# Bcftool command to annotate the chr1.vcf.gz with more RSIDS
 bcftools annotate --annotations dbsnp_146.hg38.vcf.gz --columns ID chr1.vcf.gz -Oz -o annotated.vcf.gz
