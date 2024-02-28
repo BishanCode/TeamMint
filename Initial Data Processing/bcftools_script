@@ -1,0 +1,1 @@
+bcftools annotate --annotations snp147.vcf.gz --columns ID chr1.vcf.gz -Oz -o annotated2.vcf.gz
