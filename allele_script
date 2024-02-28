@@ -1,0 +1,1 @@
+plink2 --vcf annotated.vcf.gz --freq --pheno sample_pop.tsv --loop-cats population
