@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .scroll-to-bottom {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results</h1>
+    {% for snp in snp_data %}
+    <h3>SNP ID: {{ snp.id_name }}</h3>
+    {% if snp.allele_freq_data %}
+        <h2>Allele Frequencies and Genotype Frequencies:</h2>
+        <table>
+            <tr>
+                <th>Population</th>
+                <th>Alternative Allele Frequency</th>
+                <th>Reference Allele Frequency</th>
+                <th>{{ snp.snp_char_data['alt_allele'] + snp.snp_char_data['alt_allele'] }}</th>
+                <th>{{ snp.snp_char_data['ref_allele'] + snp.snp_char_data['ref_allele']}}</th>
+                <th>{{ snp.snp_char_data['ref_allele'] }}{{ snp.snp_char_data['alt_allele'] }}</th>
+            </tr>
+            {% for population, allele_freq in snp.allele_freq_data.items() %}
+            <tr>
+                <td>{{ population }}</td>
+                <td>{{ allele_freq }}</td>
+                <td>{{ snp.ref_allele_freq_data[population] }}</td>
+                <td>{{ snp.genotype_freq_data[population]['Homozygous Alt'] }}</td>
+                <td>{{ snp.genotype_freq_data[population]['Homozygous Ref'] }}</td>
+                <td>{{ snp.genotype_freq_data[population]['Heterozygous'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>SNP Characteristics:</h2>
+        <table>
+            <tr>
+                <th>Characteristic</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Reference Allele</td>
+                <td>{{ snp.snp_char_data['ref_allele'] }}</td>
+            </tr>
+            <tr>
+                <td>Alternative Allele</td>
+                <td>{{ snp.snp_char_data['alt_allele'] }}</td>
+            </tr>
+            <tr>
+                <td>Disease</td>
+                <td>{{ snp.snp_char_data['disease'] }}</td>
+            </tr>
+            <tr>
+                <td>Classification</td>
+                <td>{{ snp.snp_char_data['classification'] }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p>No data available for SNP ID: {{ snp.id_name }}</p>
+    {% endif %}
+    {% endfor %}
+    {% if not single_population %}
+    <h2>Pairwise Fst Matrix:</h2>
+    <img src="data:image/png;base64,{{ fst_matrix_image }}" alt="Pairwise Fst Matrix">
+   
+    <p><a href="{{ url_for('download_results', filename='fst_matrix.txt') }}">Download Fst Matrix (txt)</a></p>
+    {% else %}
+    <p>Only one population selected, therefore no pairwise Fst matrix available.</p>
+    {% endif %}
+    
+    <p><a href="/">Home Page</a></p>
+
+    <button class="scroll-to-bottom" onclick="scrollToBottom()">Scroll to Bottom</button>
+
+    <script>
+        function scrollToBottom() {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

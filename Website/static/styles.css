@@ -1,0 +1,24 @@
+/* styles.css */
+
+body {
+    background-color: mintcream; /* Mint Linux green color */
+    color: black; /* Black text */
+}
+
+button {
+    background-color: mediumseagreen; /* Green button background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+}
+
+table {
+    width: 80%; /* Table width */
+    border-collapse: collapse; /* Collapse borders */
+    margin: auto; /* Center align */
+}
+
+th, td {
+    border: 1px solid black; /* Border for table cells */
+    padding: 8px; /* Padding for table cells */
+}

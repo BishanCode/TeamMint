@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admixture</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        h1 {
+            margin-top: 50px; /* Adjust as needed */
+        }
+        form {
+            display: inline-block;
+        }
+        button {
+            font-weight: bold;
+            font-size: 14px;
+            padding: 8px 16px;
+            margin: 10px;
+        }
+        #home-button {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admixture Page</h1>
+
+    <!-- Button for Admixture by Population -->
+    <form action="admixture_home_pop">
+        <button type="submit">Admixture by Population</button>
+    </form>
+    <form action="admixture_home_superpop">
+        <button type="submit">Admixture by Superpopulation</button>
+    </form>
+
+    <!-- Button for Home Page -->
+    <form action="/">
+        <button id="home-button" type="submit">Home Page</button>
+    </form>
+</body>
+</html>
+{% endblock %}

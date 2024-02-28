@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clustering by Superpopulation</title>
+    <script>
+        function validateForm() {
+            var checkboxes = document.getElementsByName('superpopulations');
+            var isChecked = false;
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    isChecked = true;
+                    break;
+                }
+            }
+            if (!isChecked) {
+                alert("Please select at least one superpopulation.");
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+    </script>
+</head>
+<body>
+    <h1>Select superpopulations to include in the PCA plot</h1>
+
+    <!-- Form for selecting superpopulations -->
+    <form action="{{ url_for('clustering_superpopulation_plot') }}" method="post" onsubmit="return validateForm()">
+        {% for superpopulation in superpopulations %}
+            <input type="checkbox" name="superpopulations" value="{{ superpopulation }}">{{ superpopulation }}<br>
+        {% endfor %}
+        <br>
+        <input type="submit" value="Generate Plot">
+    </form>
+    <form action="/" style="margin-top: 10px;"> 
+        <input type="submit" value="Home Page">
+    </form>
+</body>
+</html>
+{% endblock %}

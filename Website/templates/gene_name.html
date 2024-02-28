@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gene Name Search</title>
+</head>
+<body>
+    <h1>Search for Genes</h1>
+    <form method="POST" onsubmit="return validateForm()">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.gene_names.label }}
+            {{ form.gene_names }}
+        </div>
+        <div>
+            <label for="populations">Select populations to include:</label><br>
+            {% for population in form.populations %}
+                {% if loop.index <= 27 %}
+                    <input type="checkbox" id="{{ population.id }}" name="populations" value="{{ population.data }}">
+                    <label for="{{ population.id }}">{{ population.label }}</label><br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+        <div style="margin-top: 10px;">
+            <button type="button" onclick="window.location.href='/allele_genotype_frequency'">Back to search by</button>
+        </div>
+    </form>
+
+    <script>
+        function validateForm() {
+            var checkboxes = document.querySelectorAll('input[name="populations"]:checked');
+            var geneNames = document.getElementById('gene_names').value;
+            if (geneNames.trim() === '') {
+                alert('Not all requirements have been fulfilled. Please enter at least one gene name.');
+                return false; // Prevent form submission
+            }
+            if (checkboxes.length === 0) {
+                alert('Not all requirements have been fulfilled. Please select at least one population.');
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

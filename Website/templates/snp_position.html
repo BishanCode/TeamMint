@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNP Search</title>
+</head>
+<body>
+    <h1>Search for SNPs by Position</h1>
+    <form method="POST" onsubmit="return validateForm()">
+        {{ form.hidden_tag() }}
+        <div>
+            <p>Please enter numbers between 12782 - 248936926</p>
+            <label for="start_position">Start Position:</label>
+            <input type="number" id="start_position" name="start_position" min="12782" max="248936926" required>
+        </div>
+        <div>
+            <label for="end_position">End Position:</label>
+            <input type="number" id="end_position" name="end_position" min="12782" max="248936926" required>
+        </div>
+        <div>
+            <label for="populations">Select populations to include:</label><br>
+            {% for population in form.populations %}
+                {% if loop.index <= 27 %}
+                    <input type="checkbox" id="{{ population.id }}" name="populations" value="{{ population.data }}">
+                    <label for="{{ population.id }}">{{ population.label }}</label><br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+        <div style="margin-top: 10px;">
+            <button type="button" onclick="window.location.href='/allele_genotype_frequency'">Back to search by</button>
+        </div>
+    </form>
+
+    <script>
+        function validateForm() {
+            var startPosition = document.getElementById('start_position').value;
+            var endPosition = document.getElementById('end_position').value;
+            var populations = document.getElementsByName('populations');
+            var populationChecked = false;
+            for (var i = 0; i < populations.length; i++) {
+                if (populations[i].checked) {
+                    populationChecked = true;
+                    break;
+                }
+            }
+            if (!populationChecked) {
+                alert('Please select at least one population.');
+                return false; // Prevent form submission
+            }
+            if (startPosition < 12782 || startPosition > 248936926) {
+                alert('Please enter a start position between 12782 and 248936926.');
+                return false; // Prevent form submission
+            }
+            if (endPosition < 12782 || endPosition > 248936926) {
+                alert('Please enter an end position between 12782 and 248936926.');
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

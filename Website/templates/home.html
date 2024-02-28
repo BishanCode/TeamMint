@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        button {
+            font-weight: bold;
+            font-size: 14px; 
+            padding: 8px 16px; 
+            margin: 10px; 
+        }
+        table {
+            margin: auto;
+            text-align: left;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Team Mint's Home Page</h1>
+    <p>Select an option to proceed:</p>
+    <button onclick="location.href='/admixture'">Admixture</button>
+    <button onclick="location.href='/clustering'">Clustering</button>
+    <button onclick="location.href='/allele_genotype_frequency'">Allele & Genotype Frequencies</button>
+
+    <h2>Legend of population used in the analysis above</h2>
+    <table border="1">
+        <tr>
+            <th>Code</th>
+            <th>Population</th>
+            <th>Region</th>
+        </tr>
+        <tr>
+            <td>ACB</td>
+            <td>African Caribbean in Barbados</td>
+            <td>AFR (African)</td>
+        </tr>
+        <tr>
+            <td>ASW</td>
+            <td>African Ancestry in Southwestern USA</td>
+            <td>AFR</td>
+        </tr>
+        <tr>
+            <td>ESN</td>
+            <td>Esan in Nigeria</td>
+            <td>AFR</td>
+        </tr>
+        <tr>
+            <td>GWD</td>
+            <td>Gambian in Western Division – Mandinka</td>
+            <td>AFR</td>
+        </tr>
+        <tr>
+            <td>LWK</td>
+            <td>Luhya in Webuye, Kenya</td>
+            <td>AFR</td>
+        </tr>
+        <tr>
+            <td>MSL</td>
+            <td>Mende in Sierra Leone</td>
+            <td>AFR</td>
+        </tr>
+        <tr>
+            <td>YRI</td>
+            <td>Yoruba in Ibadan, Nigeria</td>
+            <td>AFR</td>
+        </tr>
+        <tr>
+            <td>CLM</td>
+            <td>Colombian in Medellín, Colombia</td>
+            <td>AMR (American)</td>
+        </tr>
+        <tr>
+            <td>MXL</td>
+            <td>Mexican Ancestry in Los Angeles, California, United States</td>
+            <td>AMR</td>
+        </tr>
+        <tr>
+            <td>PEL</td>
+            <td>Peruvian in Lima, Peru</td>
+            <td>AMR</td>
+        </tr>
+        <tr>
+            <td>PUR</td>
+            <td>Puerto Rican in Puerto Rico</td>
+            <td>AMR</td>
+        </tr>
+        <tr>
+            <td>CDX</td>
+            <td>Chinese Dai in Xishuangbanna, China</td>
+            <td>EAS (East Asian)</td>
+        </tr>
+        <tr>
+            <td>CHB</td>
+            <td>Han Chinese in Beijing, China</td>
+            <td>EAS</td>
+        </tr>
+        <tr>
+            <td>CHS</td>
+            <td>Han Chinese South, China</td>
+            <td>EAS</td>
+        </tr>
+        <tr>
+            <td>JPT</td>
+            <td>Japanese in Tokyo, Japan</td>
+            <td>EAS</td>
+        </tr>
+        <tr>
+            <td>KHV</td>
+            <td>Kinh in Ho Chi Minh City, Vietnam</td>
+            <td>EAS</td>
+        </tr>
+        <tr>
+            <td>GBR</td>
+            <td>British from England and Scotland</td>
+            <td>EUR (European)</td>
+        </tr>
+        <tr>
+            <td>FIN</td>
+            <td>Finnish in Finland</td>
+            <td>EUR</td>
+        </tr>
+        <tr>
+            <td>IBS</td>
+            <td>Iberian populations in Spain</td>
+            <td>EUR</td>
+        </tr>
+        <tr>
+            <td>TSI</td>
+            <td>Toscani in Italia</td>
+            <td>EUR</td>
+        </tr>
+        <tr>
+            <td>CEU</td>
+            <td>Utah residents with Northern and Western European ancestry from the CEPH collection</td>
+            <td>EUR</td>
+        </tr>
+        <tr>
+            <td>SIB</td>
+            <td>Siberian</td>
+            <td>EUR</td>
+        </tr>
+        <tr>
+            <td>BEB</td>
+            <td>Bengali in Bangladesh</td>
+            <td>SAS (South Asian)</td>
+        </tr>
+        <tr>
+            <td>GIH</td>
+            <td>Gujarati Indians in Houston, Texas, United States</td>
+            <td>SAS</td>
+        </tr>
+        <tr>
+            <td>ITU</td>
+            <td>Indian Telugu in the U.K.</td>
+            <td>SAS</td>
+        </tr>
+        <tr>
+            <td>PJL</td>
+            <td>Punjabi in Lahore, Pakistan</td>
+            <td>SAS</td>
+        </tr>
+        <tr>
+            <td>STU</td>
+            <td>Sri Lankan Tamil in the U.K.</td>
+            <td>SAS</td>
+        </tr>
+    </table>
+</body>
+</html>
+{% endblock %}
