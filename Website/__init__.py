@@ -166,7 +166,7 @@ def create_app():
     
     # Function to perform PCA and generate plot
     def generate_admixture_plot(selected_populations):
-        # Step 1: Query Data
+    # Step 1: Query Data
         query = """
                 SELECT pop_superpop.sample_id, admixture_data.pop1, admixture_data.pop2,
                     admixture_data.pop3, admixture_data.pop4, admixture_data.pop5,
@@ -182,22 +182,36 @@ def create_app():
 
         # Step 2: Plotting
         num_populations = len(selected_populations)
-        fig, axes = plt.subplots(num_populations, 1, figsize=(25, 5*num_populations))
-
-        for i, population in enumerate(selected_populations):
+        if num_populations == 1:
+            # Only one population, don't use subplots
+            population = selected_populations[0]
             population_data = data[data['population'] == population]
 
             pal = ['red', 'blue', 'green', 'orange', 'purple']
-            ax = population_data.plot.bar(ax=axes[i], stacked=True, color=pal, width=1,
+            ax = population_data.plot.bar(stacked=True, color=pal, width=1,
                                         fontsize='x-small', edgecolor='black', linewidth=0.5)
 
-            ax.set_xticks([])  # Remove x-axis ticks
-            ax.set_xlabel('')  # Remove x-axis label
-            ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize='medium', labelspacing=0.5, frameon=False)
- 
-            ax.set_title(f'Admixture Plot for Population: {population}')
             ax.set_xlabel('Individual')
             ax.set_ylabel('Ancestry')
+            ax.set_title(f'Admixture Plot for Population: {population}')
+            ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize='medium', labelspacing=0.5, frameon=False)
+        else:
+            fig, axes = plt.subplots(num_populations, 1, figsize=(25, 5*num_populations))
+
+            for i, population in enumerate(selected_populations):
+                population_data = data[data['population'] == population]
+
+                pal = ['red', 'blue', 'green', 'orange', 'purple']
+                ax = population_data.plot.bar(ax=axes[i], stacked=True, color=pal, width=1,
+                                            fontsize='x-small', edgecolor='black', linewidth=0.5)
+
+                ax.set_xticks([])  # Remove x-axis ticks
+                ax.set_xlabel('')  # Remove x-axis label
+                ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize='medium', labelspacing=0.5, frameon=False)
+        
+                ax.set_title(f'Admixture Plot for Population: {population}')
+                ax.set_xlabel('Individual')
+                ax.set_ylabel('Ancestry')
 
         plt.tight_layout()
         
@@ -208,6 +222,7 @@ def create_app():
         plot_url = base64.b64encode(img.getvalue()).decode()
 
         return plot_url
+
 # Admixture for population
     @app.route('/admixture_home_pop', methods=['GET', 'POST'])
     def admixture_pop():
