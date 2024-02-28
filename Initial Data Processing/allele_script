@@ -1,1 +1,6 @@
+# Command to calculate the allele frequencies
+# -- vcf flag tells Plink to the input is a VCF file
+# --freq to calculate allele frequencies
+# --pheno to tell Plink to use the sample_pop.tsv for the population labels
+# --loop-cats population is group the frequencies by population
 plink2 --vcf annotated.vcf.gz --freq --pheno sample_pop.tsv --loop-cats population
