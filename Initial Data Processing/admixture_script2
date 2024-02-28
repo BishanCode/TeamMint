@@ -1,1 +1,3 @@
+# Command to run Admixture on the .bed file 
+# The 5 at the end is for the 5 superpopulations
 admixture annotatedfiles.bed 5
