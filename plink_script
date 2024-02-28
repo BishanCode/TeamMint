@@ -1,2 +1,0 @@
-plink --vcf annotated.vcf.gz --make-bed --out output_file
-
