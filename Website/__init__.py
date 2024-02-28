@@ -8,7 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, SubmitField, SelectMultipleField, StringField
 from wtforms.validators import Optional, NumberRange
 import matplotlib
-matplotlib.use("AGG")
+matplotlib.use("AGG") # Requried for Mac users
 import numpy as np
 from itertools import combinations
 
@@ -16,7 +16,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'Teammint123@'
 
-    # Database connection
+    # Database connection, change the information for database if needed. 
     connection = mysql.connector.connect(
         user="root",
         password="Teammint123@",
@@ -133,7 +133,7 @@ def create_app():
         print("Selected superpopulations for superpopulation plot:", selected_superpopulations)
         plot_data = generate_pca_plot(selected_superpopulations, population=False)
         return render_template('clustering_superpopulation_plot.html', plot_data=plot_data)
-    
+
     @app.route('/admixture')
     def admixture():
         return render_template('admixture.html')
