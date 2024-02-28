@@ -156,14 +156,6 @@ def create_app():
         populations = list(population_colours.keys()) 
         return render_template('clustering_population.html', populations=populations)
     
-    # Route for generating and displaying the PCA plot based on selected superpopulations
-    @app.route('/clustering/clustering_superpopulation_plot', methods=['POST'])
-    def clustering_superpopulation_plot():
-        selected_superpopulations = request.form.getlist('superpopulations')
-        #print("Selected superpopulations:", selected_superpopulations)  # Add this print statement
-        plot_data = generate_pca_plot(selected_superpopulations, population=False)
-        return render_template('clustering_superpopulation_plot.html', plot_data=plot_data)
-    
     # Function to perform PCA and generate plot
     def generate_admixture_plot(selected_populations):
     # Step 1: Query Data
