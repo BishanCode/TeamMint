@@ -1,1 +1,2 @@
-plink --vcf annotated.vcf.gz --pca --out clustering
+# Plink script to perform PCA
+plink2 --vcf annotated.vcf.gz --pca --out clustering
