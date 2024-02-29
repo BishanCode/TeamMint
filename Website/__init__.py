@@ -416,15 +416,21 @@ def create_app():
                         sum_squared_diff += 2 * (pi_total - pi_within)
                         
                     fst = sum_squared_diff / (num_snps * pi_total)
+                    
                     fst_matrix[i][j] = fst
                     fst_matrix[j][i] = fst  
-
+        
+        # Normalize Fst matrix between 0 and 1
+        max_fst = np.max(fst_matrix)
+        min_fst = np.min(fst_matrix)
+        fst_matrix = (fst_matrix - min_fst) / (max_fst - min_fst)
+        
         return fst_matrix
 
-
+    # Function for fst matrix visulization 
     def visualize_fst(fst_matrix, pop_list):
         plt.figure(figsize=(8, 6))
-        plt.imshow(fst_matrix, cmap='viridis', interpolation='nearest')
+        plt.imshow(fst_matrix, cmap='viridis', interpolation='nearest',vmin=0, vmax=1)  
         plt.colorbar(label='Fst')
         plt.xticks(np.arange(len(pop_list)), pop_list, rotation=45)
         plt.yticks(np.arange(len(pop_list)), pop_list)

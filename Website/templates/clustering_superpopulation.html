@@ -31,7 +31,7 @@
     <h1>Select superpopulations to include in the PCA plot</h1>
 
     <!-- Form for selecting superpopulations -->
-    <form action="{{ url_for('clustering_superpopulation_plot') }}" method="post" onsubmit="return validateForm()">
+    <form action="/plot/superpopulation" method="post" onsubmit="return validateForm()">
         {% for superpopulation in superpopulations %}
             <input type="checkbox" name="superpopulations" value="{{ superpopulation }}">{{ superpopulation }}<br>
         {% endfor %}
