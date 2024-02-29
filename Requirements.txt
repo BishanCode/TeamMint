@@ -1,0 +1,15 @@
+flask
+pandas
+mySQL.connector
+numpy
+matplotlib 
+matplotlib.pyplot
+io 
+base64
+wtforms
+wtforms.validators
+itertools
+pymysql
+zarr
+scikit-allel
+numcodecs
