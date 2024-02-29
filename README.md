@@ -20,6 +20,6 @@ If you wish to recreate the SQL database these additional packages are required:
 - Numcodecs
 <!-- end of the list -->
 ## Installation
-Use python 64bit (v3.11.7 64bit).<br> 
-Download the ‘Website’ folder and ‘main.py’. Run main.py using your choice of Python IDE or open up a terminal and type cd /path/to/Website and python main.py. Ensure MYSQL 8.0.36 database is created via downloading all the files in “Make the database” and running make_database.ipynb or if you want to start from scratch to download all the files in “Initial Data Processing”. <br> 
-For Mac ensure on the top where the imports matplotlib.use(“AGG”) is coded.
+- Use python 64bit (v3.11.7 64bit).
+- Download the ‘Website’ folder and ‘main.py’. Run main.py using your choice of Python IDE or open up a terminal and type cd /path/to/Website and python main.py. Ensure MYSQL 8.0.36 database is created via downloading all the files in “Make the database” and running make_database.ipynb or if you want to start from scratch to download all the files in “Initial Data Processing”.
+- For Mac ensure on the top where the imports matplotlib.use(“AGG”) is coded.
