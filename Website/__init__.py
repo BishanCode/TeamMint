@@ -134,14 +134,17 @@ def create_app():
         plot_data = generate_pca_plot(selected_superpopulations, population=False)
         return render_template('clustering_superpopulation_plot.html', plot_data=plot_data)
 
+    # Main page for admixture analysis
     @app.route('/admixture')
     def admixture():
         return render_template('admixture.html')
-    
+
+    # Main page for genotype and allele frequency analysis
     @app.route('/allele_genotype_frequency')
     def allele_genotype_frequency():
         return render_template('allele_genotype_frequency.html')
-    
+
+    # Main page for clustering (PCA) analysis
     @app.route('/clustering')
     def clustering():
         return render_template('clustering.html')
@@ -156,7 +159,7 @@ def create_app():
         populations = list(population_colours.keys()) 
         return render_template('clustering_population.html', populations=populations)
     
-    # Function to perform PCA and generate plot
+    # Function to query admixture data from selected populations and generate admixture plot 
     def generate_admixture_plot(selected_populations):
     # Step 1: Query Data
         query = """
@@ -215,7 +218,7 @@ def create_app():
 
         return plot_url
 
-# Admixture for population
+    # Route for selecting populations for doing admixture analysis
     @app.route('/admixture_home_pop', methods=['GET', 'POST'])
     def admixture_pop():
         populations = ['ACB', 'ASW', 'ESN', 'GWD', 'LWK', 'MSL', 'YRI', 'CLM', 'MXL', 'PEL', 'PUR', 'CDX', 'CHB',
@@ -223,13 +226,14 @@ def create_app():
                     'STU']
         return render_template('admixture_home_pop.html', populations=populations)
 
+    # Route for generating admixture plot through selected populations
     @app.route('/admixture_pop_plot', methods=['POST'])
     def admixture_pop_plot():
         selected_populations = request.form.getlist('superpopulations')
         plot_data = generate_admixture_plot(selected_populations)
         return render_template('admixture_pop_plot.html', plot_data=plot_data)
 
-
+    # Function to query admixture data from selected superpopulation and generate plot
     def generate_admixture_plot_super(selected_populations):
         plot_urls = []
 
@@ -289,29 +293,33 @@ def create_app():
 
         return plot_urls
 
-# Admixture Superpopulation
+    # Route for selecting superpopulations of interest for admixture analysis
     @app.route('/admixture_home_superpop', methods=['GET', 'POST'])
     def admixture_superpop():
         superpopulations = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS']
         return render_template('admixture_home_superpop.html', populations=superpopulations)
 
+    # Route for generating admixture plot from selected superpopulation 
     @app.route('/admixture_superpop_plot', methods=['POST'])
     def admixture_superpop_plot():
         selected_populations = request.form.getlist('superpopulations')
         plot_data = generate_admixture_plot_super(selected_populations)
         superpopulations = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS']  # Define your list of superpopulations here
         return render_template('admixture_superpop_plot.html', plot_data=plot_data, populations=superpopulations)
-    
+
     class SNPForm(FlaskForm):
         start_position = IntegerField('Start Position:', validators=[Optional(), NumberRange(min=12782, max=248936926)])
         end_position = IntegerField('End Position:', validators=[Optional(), NumberRange(min=12782, max=248936926)])
         populations = SelectMultipleField('Select populations to include:', coerce=str)
         submit = SubmitField('Submit')
 
+    # Route for entering chromosome region and populations of interest
     @app.route('/position_search', methods=['GET', 'POST'])
     def position_search():
         form = SNPForm()
+        # Get population names from database and show as options 
         form.populations.choices = get_population_labels()
+        # Sumbit selected chromosome position and populations
         if form.validate_on_submit():
             start_position = form.start_position.data
             end_position = form.end_position.data
@@ -319,15 +327,18 @@ def create_app():
             return redirect(url_for('search_snp', start_position=start_position, end_position=end_position, populations=selected_populations))
         return render_template('snp_position.html', form=form)
 
+    # Route to query snp data from database using selected position and populations. 
     @app.route('/search_snp', methods=['GET', 'POST'])
     def search_snp():
         start_position = request.args.get('start_position', type=int)
         end_position = request.args.get('end_position', type=int)
         selected_populations = request.args.getlist('populations')
 
+        # check if position is existing
         if start_position is None or end_position is None:
             return "Please enter both start and end positions."
 
+        # check if end position is greater than start position
         if start_position >= end_position:
             return "End position must be greater than start position."
 
@@ -344,6 +355,7 @@ def create_app():
                 snp_id = snp_char_row['snp_id']
                 allele_freq_data = {}
                 for i, population in enumerate(selected_populations):
+                    # get allele frequency data of selected snps from database 
                     query = f"SELECT {population} FROM allele_freq WHERE snp_id = '{snp_id}'"
                     cursor.execute(query)
                     frequency = cursor.fetchone()
@@ -356,7 +368,8 @@ def create_app():
                 for population in selected_populations:
                     alt_freq = allele_freq_data.get(population, 0)
                     ref_freq = ref_allele_freq_data.get(population, 0)
-                    homo_alt_freq = alt_freq ** 2
+                    # Calculating genotype frequency 
+                    homo_alt_freq = alt_freq ** 2 
                     homo_ref_freq = ref_freq ** 2
                     hetero_freq = 2 * ref_freq * alt_freq
                     genotype_freq_data[population] = {'Homozygous Alt': homo_alt_freq, 'Homozygous Ref': homo_ref_freq, 'Heterozygous': hetero_freq}
@@ -394,6 +407,7 @@ def create_app():
         except UnboundLocalError:
             return "No data found within this range."
 
+    # Function for calculating fst matrix 
     def calculate_fst(alt_freq_values):
         num_populations = len(alt_freq_values)
         num_snps = len(alt_freq_values[0])  
@@ -449,6 +463,7 @@ def create_app():
         
         return plot_url
 
+    # Function to get population names from database to show on webpage "/position_search".
     def get_population_labels():
         try:
             cursor = connection.cursor()
@@ -470,6 +485,7 @@ def create_app():
             print(f"Error while fetching population labels from MySQL: {error}")
             return []
 
+    # Route to allow downloading fst matrix 
     @app.route('/download_results')
     def download_results():
         # Load the Fst matrix data
@@ -487,6 +503,7 @@ def create_app():
         populations = SelectMultipleField('Select populations to include:', coerce=str)
         submit = SubmitField('Submit')
 
+    # Route for entering interestd snp ids and selecting populations 
     @app.route('/ID_search', methods=['GET', 'POST'])
     def ID_search():
         form = IDForm()
@@ -497,6 +514,7 @@ def create_app():
             return redirect(url_for('ID_snp', id_names=','.join(id_names), populations=selected_populations))
         return render_template('snp_id.html', form=form)
 
+    # Route for querying snp data from database based on selected snp ids. 
     @app.route('/ID_snp', methods=['GET', 'POST'])
     def ID_snp():
         id_names = request.args.get('id_names')
@@ -520,6 +538,7 @@ def create_app():
             )
             cursor = connection.cursor(dictionary=True)
 
+            # get allele frequency data from table allele_freq
             snp_data = []
             for id_name in id_names:
                 allele_freq_data = {}
@@ -536,11 +555,13 @@ def create_app():
                 for population in selected_populations:
                     alt_freq = allele_freq_data.get(population, 0)
                     ref_freq = ref_allele_freq_data.get(population, 0)
+                    # Calculating genotype frequency
                     homo_alt_freq = alt_freq ** 2
                     homo_ref_freq = ref_freq ** 2
                     hetero_freq = 2 * ref_freq * alt_freq
                     genotype_freq_data[population] = {'Homozygous Alt': homo_alt_freq, 'Homozygous Ref': homo_ref_freq, 'Heterozygous': hetero_freq}
 
+                # get snp basic information from table snp_char 
                 snp_char_data = {}
                 snp_char_query = f"SELECT ref_base, alt_base, disease_name, classification FROM snp_char WHERE snp_id = '{id_name}'"
                 cursor.execute(snp_char_query)
@@ -575,6 +596,7 @@ def create_app():
         populations = SelectMultipleField('Select populations to include:', coerce=str)
         submit = SubmitField('Submit')
 
+    # Route for entering genes of interest and selecting population 
     @app.route('/GeneName_search', methods=['GET', 'POST'])  # Changed from /snp_search to /GeneName_search
     def GeneName_search():  # Changed from snp_search to GeneName_search
         form = GeneNameForm()  # Changed from SNPForm to GeneNameForm
@@ -585,6 +607,7 @@ def create_app():
             return redirect(url_for('GeneName_snp', gene_names=','.join(gene_names), populations=selected_populations))  # Changed from search_snp to GeneName_snp
         return render_template('gene_name.html', form=form)
 
+    # query the database to get back snp data and allele frequency data of selected genes
     @app.route('/GeneName_snp', methods=['GET', 'POST'])  # Changed from /search_snp to /GeneName_snp
     def GeneName_snp():  # Changed from search_snp to GeneName_snp
         gene_names = request.args.get('gene_names')
@@ -595,6 +618,7 @@ def create_app():
         else:
             gene_names = []
 
+        # get snp ids based on selected genes 
         id_names = get_snp_ids_from_gene_names(gene_names)
 
         pop_list = []  
@@ -604,6 +628,7 @@ def create_app():
             cursor = connection.cursor(dictionary=True)
 
             snp_data = []
+            # get the allele frequency data using snp ids. 
             for id_name in id_names:
                 allele_freq_data = {}
                 for i, population in enumerate(selected_populations):
@@ -614,6 +639,7 @@ def create_app():
                         allele_freq_data[population] = frequency[population]
                         alt_freq_values[i].append(frequency[population])
 
+                # Calculating genotype frequency.
                 ref_allele_freq_data = {population: 1 - freq for population, freq in allele_freq_data.items()}
                 genotype_freq_data = {}
                 for population in selected_populations:
@@ -624,6 +650,7 @@ def create_app():
                     hetero_freq = 2 * ref_freq * alt_freq
                     genotype_freq_data[population] = {'Homozygous Alt': homo_alt_freq, 'Homozygous Ref': homo_ref_freq, 'Heterozygous': hetero_freq}
 
+                # Get snp information from table snp_char 
                 snp_char_data = {}
                 snp_char_query = f"SELECT ref_base, alt_base, disease_name, classification FROM snp_char WHERE snp_id = '{id_name}'"
                 cursor.execute(snp_char_query)
@@ -635,7 +662,8 @@ def create_app():
                     snp_char_data['classification'] = snp_char_row['classification']
 
                 snp_data.append({'id_name': id_name, 'allele_freq_data': allele_freq_data, 'ref_allele_freq_data': ref_allele_freq_data, 'genotype_freq_data': genotype_freq_data, 'snp_char_data': snp_char_data})
-            
+
+            # Calculate and visulize fst matrix 
             fst_matrix = calculate_fst(alt_freq_values)
             plot_url = visualize_fst(fst_matrix, selected_populations)
             
@@ -654,13 +682,16 @@ def create_app():
             return f"Error while connecting to MySQL: {error}"
         except UnboundLocalError:
             return "No data found for the provided gene name."  
-        
+
+    # Get snp ids based on their corresponding genes
     def get_snp_ids_from_gene_names(gene_names):
         try:
             cursor = connection.cursor()
 
             snp_ids = []
 
+            # This query first gets the position data from table gene_names and then query the snp_char table to get snp ids based
+            # on the position data. 
             for gene_name in gene_names:
                 query = f"SELECT snp_id FROM snp_char WHERE position IN (SELECT position FROM gene_names WHERE gene_name = '{gene_name}')"
                 cursor.execute(query)
