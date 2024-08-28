@@ -14,7 +14,7 @@ from itertools import combinations
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'Teammint123@'
+    app.config['SECRET_KEY'] = 'Password'
 
     # Database connection, change the information for database if needed. 
     connection = mysql.connector.connect(
