@@ -14,12 +14,12 @@ from itertools import combinations
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'Password'
+    app.config['SECRET_KEY'] = 'Password' # Password of your choice
 
     # Database connection, change the information for database if needed. 
     connection = mysql.connector.connect(
         user="root",
-        password="Teammint123@",
+        password="Password", # Password of your choice (same as the one above)
         host='localhost',
         database='final'
     )
